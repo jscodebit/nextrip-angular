@@ -9,6 +9,6 @@ export class AppComponent {
   appTitle = 'Nextrip Angular';
 
   notifyMe(event){
-    console.log(event);
+    //console.log(event);
   }
 }

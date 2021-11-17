@@ -1,4 +1,4 @@
-<ul class="nav nav-pills justify-content-center">
+<ul class="nav nav-pills justify-content-center m-t-2">
   <li *ngFor="let tab of tabs" class="nav-item" (click)="selectTab(tab)">
     <a class="nav-link" [ngClass]="{'active': tab.active === true}" href="#">{{ tab.tabTitle }}</a>
   </li>

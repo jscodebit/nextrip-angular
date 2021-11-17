@@ -3,11 +3,11 @@
   <div class="row">
     <div class="col-md-12">
       <app-tabs (currentTabChange)="notifyMe($event)">
-        <app-tab tabTitle="Foo">
-          I am the foo content
+        <app-tab tabTitle="By route">
+          <app-search-by-route></app-search-by-route>
         </app-tab>
-        <app-tab tabTitle="Bar">
-          I am the bar content
+        <app-tab tabTitle="By stop #">
+          <app-search-by-stop></app-search-by-stop>
         </app-tab>
       </app-tabs>
     </div>

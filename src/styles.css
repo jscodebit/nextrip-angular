@@ -2,3 +2,7 @@
 .hidden{
   display: none !important;
 }
+
+.m-t-2 {
+  margin-top: 2rem;
+}
