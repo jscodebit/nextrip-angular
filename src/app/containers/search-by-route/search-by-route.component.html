@@ -1,10 +1,30 @@
 <div class="row">
   <div class="col-md-4">
-    <select class="form-control" [(ngModel)]="valueFromSelect" (change)="onSelect()">
-      <option value="" selected>Choose item</option>
-      <option [value]="mydata.name" *ngFor="let mydata of vList">
-         <td>{{ mydata.route_id }} - {{ mydata.route_label }}</td>
-      </option>
-    </select>
+    <div class="form-group">
+      <select class="form-control" [formControl]="selectRoute">
+        <option [ngValue]="null" selected disabled>Choose item</option>
+        <option [ngValue]="route.route_id" *ngFor="let route of nextripRoutes">
+           <td>{{ route.route_label }}</td>
+        </option>
+      </select>
+    </div>
+    <!-- {{selectedRoute}} -->
+    <div class="form-group">
+      <select class="form-control" [formControl]="selectDirection" *ngIf="selectedRoute">
+        <option [ngValue]="null" selected disabled>Select direction</option>
+        <option [ngValue]="direction.direction_id" *ngFor="let direction of directions">
+           <td>{{ direction.direction_name }}</td>
+        </option>
+      </select>
+    </div>
+    <!-- {{selectedDirection}} -->
+    <div class="form-group">
+      <select class="form-control" [formControl]="selectStop" *ngIf="selectedDirection">
+        <option [ngValue]="null" selected disabled>Select stop</option>
+        <option [ngValue]="stop.place_code" *ngFor="let stop of stops">
+           <td>{{ stop.description }}</td>
+        </option>
+      </select>
+    </div>
   </div>
 </div>
