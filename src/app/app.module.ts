@@ -16,7 +16,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DisplayTableComponent } from './containers/display-table/display-table.component';
 const routes: Routes = [
   { path: ':route/:direction/:stop', component: DisplayTableComponent, pathMatch: 'full' },
-  { path: ':stopNumber', component: DisplayTableComponent, pathMatch: 'full' }
+  { path: ':stop_id', component: DisplayTableComponent, pathMatch: 'full' }
 ]
 @NgModule({
   declarations: [

@@ -49,4 +49,9 @@ export class HttpClientService {
     return this.http.get<any>(url, httpOptions)
       .pipe(catchError(HttpClientService.handleError));
   }
+  getStopsInformationByStopID(stopID): Observable<any>{
+    let url = `https://svc.metrotransit.org/nextripv2/${stopID}`;
+    return this.http.get<any>(url, httpOptions)
+      .pipe(catchError(HttpClientService.handleError));
+  }
 }

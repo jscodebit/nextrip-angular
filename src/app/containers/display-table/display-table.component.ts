@@ -10,7 +10,7 @@ import { HttpClientService } from 'src/app/services/http-services.service';
 export class DisplayTableComponent implements OnInit {
   headElements = ["ROUTE", "DESTINATION", "DEPARTS"];
   stopInformation: any = null;
-  stopID: number; route : string; direction: string; stop: string;
+  stopID: string; route : string; direction: string; stop: string;
   tableDescription: string; tableStop_ID: string; tablefieldElements: [];
 
   constructor(private activateRoute : ActivatedRoute,
@@ -18,12 +18,19 @@ export class DisplayTableComponent implements OnInit {
     this.route = this.activateRoute.snapshot.paramMap.get("route");
     this.direction = this.activateRoute.snapshot.paramMap.get("direction");
     this.stop = this.activateRoute.snapshot.paramMap.get("stop");
+    this.stopID = this.activateRoute.snapshot.paramMap.get("stop_id");
     this.httpClientService.getStopsInformation(this.route, this.direction, this.stop).subscribe(response => {
       this.stopInformation = response;
       if(this.stopInformation){
         this.populateDataToTabe(this.stopInformation);
       }
     });
+    this.httpClientService.getStopsInformationByStopID(this.stopID).subscribe(response => {
+      this.stopInformation = response;
+      if(this.stopInformation){
+        this.populateDataToTabe(this.stopInformation);
+      }
+    })
   }
 
   ngOnInit(): void {
