@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChange } from '@angular/core';
 
 @Component({
   selector: 'app-data-table',
@@ -11,9 +11,8 @@ export class DataTableComponent implements OnInit {
   @Input() headElements: string[];
   @Input() fieldElements: string[];
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(){}
 
 }

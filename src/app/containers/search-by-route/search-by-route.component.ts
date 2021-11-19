@@ -1,12 +1,11 @@
 import { Component, DoCheck, OnChanges, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { HttpClientService } from 'src/app/services/http-services.service';
-import { NextripRoutesService } from 'src/app/services/nextrip-routes.service';
 import { Direction } from 'src/app/shared/Direction';
 import { NextripRoute } from 'src/app/shared/NextripRoute';
 import { Stop } from 'src/app/shared/Stop';
-import { StopInformationDataModel } from 'src/app/shared/StopInformationDataModel';
 
 @Component({
   selector: 'app-search-by-route',
@@ -22,7 +21,7 @@ export class SearchByRouteComponent implements OnInit {
   listOfStops;
 
   constructor(private httpClientService: HttpClientService,
-    private nextripRoutesService: NextripRoutesService) { }
+    private router: Router) { }
 
   ngOnInit(){
     console.log("OnInit");
@@ -43,18 +42,9 @@ export class SearchByRouteComponent implements OnInit {
     this.selectStop.valueChanges.subscribe(value => {
       //console.log(value);
       this.selectedStop = value;
-      this.getNextripStopsInformation(this.selectedRoute, this.selectedDirection, this.selectedStop)
+      this.router.navigate(['/'+this.selectedRoute +'/'+this.selectedDirection+'/'+this.selectedStop]);
     });
   }
-  // ngOnChanges(){
-  //   console.log("Hello");
-  //   if(this.selectedRoute)
-  //     this.getNextripDirection();
-  // }
-  // ngDoCheck(){
-  //   //console.log("Hello");
-
-  // }
 
   getNextripRoutes(){
     return this.httpClientService.getRoutes().subscribe(
@@ -90,21 +80,9 @@ export class SearchByRouteComponent implements OnInit {
       response => {
         console.log(response);
         //this.listOfStops = response;
-        this.nextripRoutesService.getStopInformation(response);
       },
       error => { console.log(error);}
     )
-  }
-  onSelect(){
-    debugger;
-    console.log();
-    // this.httpClientService.getDirection(route.route_id).subscribe(
-    //   response => {
-    //     console.log(response);
-    //     this.directions = response;
-    //   },
-    //   error => { console.log(error);}
-    // )
   }
 
 }

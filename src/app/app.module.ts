@@ -10,10 +10,14 @@ import { SearchByStopComponent } from './containers/search-by-stop/search-by-sto
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientService } from './services/http-services.service';
-import { NextripRoutesService } from './services/nextrip-routes.service';
 import { CommonModule } from '@angular/common';
 import { DataTableComponent } from './components/data-table/data-table.component';
-
+import { RouterModule, Routes } from '@angular/router';
+import { DisplayTableComponent } from './containers/display-table/display-table.component';
+const routes: Routes = [
+  { path: ':route/:direction/:stop', component: DisplayTableComponent, pathMatch: 'full' },
+  { path: ':stopNumber', component: DisplayTableComponent, pathMatch: 'full' }
+]
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,17 +27,18 @@ import { DataTableComponent } from './components/data-table/data-table.component
     SearchByRouteComponent,
     SearchByStopComponent,
     DataTableComponent,
+    DisplayTableComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    CommonModule
+    CommonModule,
+    RouterModule.forRoot(routes, {useHash: false})
   ],
   providers: [
-    HttpClientService,
-    NextripRoutesService
+    HttpClientService
   ],
   bootstrap: [AppComponent]
 })

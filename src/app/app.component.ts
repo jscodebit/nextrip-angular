@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { HttpClientService } from './services/http-services.service';
-import { NextripRoutesService } from './services/nextrip-routes.service';
-import { StopInformationDataModel } from './shared/StopInformationDataModel';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,12 +8,8 @@ import { StopInformationDataModel } from './shared/StopInformationDataModel';
 })
 export class AppComponent implements OnInit {
   appTitle = 'Nextrip Angular';
-  headElements = ["ROUTE", "DESTINATION", "DEPARTS"];
-  stopInformation: any;
-  stopID: number;
 
-  constructor(private nextripRoutesService: NextripRoutesService){}
-
+  constructor(){}
   ngOnInit(){
     // this.stopInformation = this.nextripRoutesService.passStopDetails();
     // if(this.stopInformation){
