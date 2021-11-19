@@ -12,4 +12,15 @@
       </app-tabs>
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-6">
+      <app-data-table
+        *ngIf="stopInformation"
+        [dataTableTitle]="'Sample'"
+        [stopID]="stopID"
+        [headElements]="headElements"
+
+        ></app-data-table>
+    </div>
+  </div>
 </div>

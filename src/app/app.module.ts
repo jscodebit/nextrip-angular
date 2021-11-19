@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpClientService } from './services/http-services.service';
 import { NextripRoutesService } from './services/nextrip-routes.service';
 import { CommonModule } from '@angular/common';
+import { DataTableComponent } from './components/data-table/data-table.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { CommonModule } from '@angular/common';
     TabComponent,
     SearchByRouteComponent,
     SearchByStopComponent,
+    DataTableComponent,
   ],
   imports: [
     BrowserModule,

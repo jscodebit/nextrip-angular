@@ -1,10 +1,12 @@
-import { Component, DoCheck, OnChanges, OnInit } from '@angular/core';
+import { Component, DoCheck, OnChanges, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormsModule } from '@angular/forms';
 
 import { HttpClientService } from 'src/app/services/http-services.service';
+import { NextripRoutesService } from 'src/app/services/nextrip-routes.service';
 import { Direction } from 'src/app/shared/Direction';
 import { NextripRoute } from 'src/app/shared/NextripRoute';
 import { Stop } from 'src/app/shared/Stop';
+import { StopInformationDataModel } from 'src/app/shared/StopInformationDataModel';
 
 @Component({
   selector: 'app-search-by-route',
@@ -17,9 +19,10 @@ export class SearchByRouteComponent implements OnInit {
   stops: Stop[];
   selectRoute: FormControl; selectDirection: FormControl; selectStop: FormControl;
   selectedRoute: string; selectedDirection: string; selectedStop: string;
-  stopsInformation: any;
+  listOfStops;
 
-  constructor(private httpClientService: HttpClientService) { }
+  constructor(private httpClientService: HttpClientService,
+    private nextripRoutesService: NextripRoutesService) { }
 
   ngOnInit(){
     console.log("OnInit");
@@ -28,13 +31,13 @@ export class SearchByRouteComponent implements OnInit {
     this.selectStop = new FormControl();
     this.getNextripRoutes();
     this.selectRoute.valueChanges.subscribe(value => {
-      //console.log(value);
+      //console.log(typeof this.selectedRoute);
       this.selectedRoute = value;
       this.getNextripDirection(this.selectedRoute);
     })
     this.selectDirection.valueChanges.subscribe(value => {
       //console.log(value);
-      this.selectedDirection = value;
+      this.selectedDirection = value.toString();
       this.getNextripStops(this.selectedRoute, this.selectedDirection);
     })
     this.selectStop.valueChanges.subscribe(value => {
@@ -42,7 +45,6 @@ export class SearchByRouteComponent implements OnInit {
       this.selectedStop = value;
       this.getNextripStopsInformation(this.selectedRoute, this.selectedDirection, this.selectedStop)
     });
-    //this.getNextripStopsInformation();
   }
   // ngOnChanges(){
   //   console.log("Hello");
@@ -59,8 +61,8 @@ export class SearchByRouteComponent implements OnInit {
       response => {
         //console.log(response);
         this.nextripRoutes = response;
-        if(this.selectRoute)
-          this.getNextripDirection(this.selectRoute);
+        if(this.selectRoute.value)
+          this.getNextripDirection(this.selectRoute.value);
       },
       error => { console.log(error);}
     )
@@ -87,7 +89,8 @@ export class SearchByRouteComponent implements OnInit {
     return this.httpClientService.getStopsInformation(route, direction, stop).subscribe(
       response => {
         console.log(response);
-        this.stopsInformation = response
+        //this.listOfStops = response;
+        this.nextripRoutesService.getStopInformation(response);
       },
       error => { console.log(error);}
     )

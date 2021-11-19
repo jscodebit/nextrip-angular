@@ -35,7 +35,7 @@ export class HttpClientService {
   }
 
   getDirection(route_id): Observable<Direction[]>{
-    let url = 'https://svc.metrotransit.org/nextripv2/directions/'+route_id;
+    let url = `https://svc.metrotransit.org/nextripv2/directions/${route_id}`;
     return this.http.get<Direction[]>(url, httpOptions)
       .pipe(catchError(HttpClientService.handleError));
   }
