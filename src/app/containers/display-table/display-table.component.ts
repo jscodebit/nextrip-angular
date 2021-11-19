@@ -19,18 +19,22 @@ export class DisplayTableComponent implements OnInit {
     this.direction = this.activateRoute.snapshot.paramMap.get("direction");
     this.stop = this.activateRoute.snapshot.paramMap.get("stop");
     this.stopID = this.activateRoute.snapshot.paramMap.get("stop_id");
-    this.httpClientService.getStopsInformation(this.route, this.direction, this.stop).subscribe(response => {
-      this.stopInformation = response;
-      if(this.stopInformation){
-        this.populateDataToTabe(this.stopInformation);
-      }
-    });
-    this.httpClientService.getStopsInformationByStopID(this.stopID).subscribe(response => {
-      this.stopInformation = response;
-      if(this.stopInformation){
-        this.populateDataToTabe(this.stopInformation);
-      }
-    })
+    if(this.route && this.direction && this.stop){
+      this.httpClientService.getStopsInformation(this.route, this.direction, this.stop).subscribe(response => {
+        this.stopInformation = response;
+        if(this.stopInformation){
+          this.populateDataToTabe(this.stopInformation);
+        }
+      });
+    }
+    if(this.stopID){
+      this.httpClientService.getStopsInformationByStopID(this.stopID).subscribe(response => {
+        this.stopInformation = response;
+        if(this.stopInformation){
+          this.populateDataToTabe(this.stopInformation);
+        }
+      })
+    }
   }
 
   ngOnInit(): void {
