@@ -24,7 +24,6 @@ export class SearchByRouteComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(){
-    console.log("OnInit");
     this.selectRoute = new FormControl();
     this.selectDirection = new FormControl();
     this.selectStop = new FormControl();
