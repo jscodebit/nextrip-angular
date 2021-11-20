@@ -1,6 +1,8 @@
-import { Component, DoCheck, OnChanges, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormControl, FormsModule } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { HttpClientService } from 'src/app/services/http-services.service';
 import { Direction } from 'src/app/shared/Direction';
@@ -12,33 +14,41 @@ import { Stop } from 'src/app/shared/Stop';
   templateUrl: './search-by-route.component.html',
   styleUrls: ['./search-by-route.component.css']
 })
-export class SearchByRouteComponent implements OnInit {
+export class SearchByRouteComponent implements OnInit, OnDestroy {
   nextripRoutes: NextripRoute[];
   directions: Direction[];
   stops: Stop[];
   selectRoute: FormControl; selectDirection: FormControl; selectStop: FormControl;
   selectedRoute: string; selectedDirection: string; selectedStop: string;
   listOfStops;
+  private ngUnSubscribe = new Subject();
 
   constructor(private httpClientService: HttpClientService,
-    private router: Router) { }
+    private router: Router) {
+      this.selectRoute = new FormControl();
+      this.selectDirection = new FormControl();
+      this.selectStop = new FormControl();
+    }
 
   ngOnInit(){
-    this.selectRoute = new FormControl();
-    this.selectDirection = new FormControl();
-    this.selectStop = new FormControl();
     this.getNextripRoutes();
-    this.selectRoute.valueChanges.subscribe(value => {
+    this.selectRoute.valueChanges
+      .pipe(takeUntil(this.ngUnSubscribe))
+      .subscribe(value => {
       //console.log(typeof this.selectedRoute);
       this.selectedRoute = value;
       this.getNextripDirection(this.selectedRoute);
     })
-    this.selectDirection.valueChanges.subscribe(value => {
+    this.selectDirection.valueChanges
+    .pipe(takeUntil(this.ngUnSubscribe))
+      .subscribe(value => {
       //console.log(value);
       this.selectedDirection = value.toString();
       this.getNextripStops(this.selectedRoute, this.selectedDirection);
     })
-    this.selectStop.valueChanges.subscribe(value => {
+    this.selectStop.valueChanges
+      .pipe(takeUntil(this.ngUnSubscribe))
+      .subscribe(value => {
       //console.log(value);
       this.selectedStop = value;
       this.router.navigate(['/'+this.selectedRoute +'/'+this.selectedDirection+'/'+this.selectedStop]);
@@ -46,7 +56,9 @@ export class SearchByRouteComponent implements OnInit {
   }
 
   getNextripRoutes(){
-    return this.httpClientService.getRoutes().subscribe(
+    return this.httpClientService.getRoutes()
+    .pipe(takeUntil(this.ngUnSubscribe))
+      .subscribe(
       response => {
         //console.log(response);
         this.nextripRoutes = response;
@@ -57,7 +69,9 @@ export class SearchByRouteComponent implements OnInit {
     )
   }
   getNextripDirection(selectedRoute){
-    return this.httpClientService.getDirection(selectedRoute).subscribe(
+    return this.httpClientService.getDirection(selectedRoute)
+    .pipe(takeUntil(this.ngUnSubscribe))
+      .subscribe(
       response => {
         //console.log(response);
         this.directions = response;
@@ -66,7 +80,9 @@ export class SearchByRouteComponent implements OnInit {
     )
   }
   getNextripStops(selectedRoute, selectDirection){
-    return this.httpClientService.getStops(selectedRoute, selectDirection).subscribe(
+    return this.httpClientService.getStops(selectedRoute, selectDirection)
+    .pipe(takeUntil(this.ngUnSubscribe))
+      .subscribe(
       response => {
         //console.log(response);
         this.stops = response;
@@ -75,13 +91,19 @@ export class SearchByRouteComponent implements OnInit {
     )
   }
   getNextripStopsInformation(route, direction, stop){
-    return this.httpClientService.getStopsInformation(route, direction, stop).subscribe(
+    return this.httpClientService.getStopsInformation(route, direction, stop)
+    .pipe(takeUntil(this.ngUnSubscribe))
+    .subscribe(
       response => {
         console.log(response);
         //this.listOfStops = response;
       },
       error => { console.log(error);}
     )
+  }
+  ngOnDestroy(): void {
+    this.ngUnSubscribe.next();
+    this.ngUnSubscribe.complete();
   }
 
 }

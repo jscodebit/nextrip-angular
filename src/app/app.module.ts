@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -12,12 +13,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpClientService } from './services/http-services.service';
 import { CommonModule } from '@angular/common';
 import { DataTableComponent } from './components/data-table/data-table.component';
-import { RouterModule, Routes } from '@angular/router';
 import { DisplayTableComponent } from './containers/display-table/display-table.component';
-const routes: Routes = [
-  { path: ':route/:direction/:stop', component: DisplayTableComponent, pathMatch: 'full' },
-  { path: ':stop_id', component: DisplayTableComponent, pathMatch: 'full' }
-]
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,7 +33,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     HttpClientModule,
     CommonModule,
-    RouterModule.forRoot(routes, {useHash: false})
+    AppRoutingModule
   ],
   providers: [
     HttpClientService

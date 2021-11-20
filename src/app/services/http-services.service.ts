@@ -14,17 +14,6 @@ const httpOptions = {
 @Injectable()
 export class HttpClientService {
 
-  private static handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-        console.error('An error occurred:', error.error.message);
-    } else {
-        console.error(
-            `Backend returned code ${error.status}, ` +
-            `body was: ${error.error}`);
-    }
-    return throwError(
-        'Something bad happened; please try again later.');
-  }
   constructor(private http: HttpClient){
   }
 
@@ -53,5 +42,17 @@ export class HttpClientService {
     let url = `https://svc.metrotransit.org/nextripv2/${stopID}`;
     return this.http.get<any>(url, httpOptions)
       .pipe(catchError(HttpClientService.handleError));
+  }
+
+  private static handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+        console.error('An error occurred:', error.error.message);
+    } else {
+        console.error(
+            `Backend returned code ${error.status}, ` +
+            `body was: ${error.error}`);
+    }
+    return throwError(
+        'Something bad happened; please try again later.');
   }
 }
