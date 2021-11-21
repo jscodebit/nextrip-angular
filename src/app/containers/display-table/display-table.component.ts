@@ -14,24 +14,31 @@ export class DisplayTableComponent implements OnInit, OnDestroy {
   headElements = ["ROUTE", "DESTINATION", "DEPARTS"];
   stopInformation: any = null;
   stopID: string; route : string; direction: string; stop: string;
-  tableDescription: string; tableStop_ID: string; tablefieldElements: []; emptyRecords: boolean = false;
+  tableDescription: string; tableStop_ID: string; tablefieldElements: any[]; emptyRecords: boolean = false;
   private ngUnSubscribe = new Subject();
 
   constructor(private activateRoute : ActivatedRoute,
         private httpClientService: HttpClientService,){
-    this.route = this.activateRoute.snapshot.paramMap.get("route");
-    this.direction = this.activateRoute.snapshot.paramMap.get("direction");
-    this.stop = this.activateRoute.snapshot.paramMap.get("stop");
-    this.stopID = this.activateRoute.snapshot.paramMap.get("stop_id");
+    // this.route = this.activateRoute.snapshot.paramMap.get("route");
+    // this.direction = this.activateRoute.snapshot.paramMap.get("direction");
+    // this.stop = this.activateRoute.snapshot.paramMap.get("stop");
+    // this.stopID = this.activateRoute.snapshot.paramMap.get("stop_id");
+
+  }
+
+  ngOnInit(): void {
+    this.activateRoute.paramMap.subscribe(params => {
+      this.route = params.get('route');
+      this.direction = params.get('direction');
+      this.stop = params.get('stop');
+      this.stopID = params.get('stop_id');
+    })
     if (this.route && this.direction && this.stop) {
       this.fetchNextripRouteInfo(this.route, this.direction, this.stop);
     }
     if (this.stopID) {
       this.fetchNextripInfoByStopID(this.stopID);
     }
-  }
-
-  ngOnInit(): void {
     // this.activateRoute.queryParams
     // .pipe(takeUntil(this.ngUnSubscribe))
     // .subscribe(params => {
@@ -46,7 +53,7 @@ export class DisplayTableComponent implements OnInit, OnDestroy {
     this.httpClientService.getStopsInformation(route, direction, stop)
     .pipe(takeUntil(this.ngUnSubscribe))
     .subscribe(response => {
-      this.stopInformation = response;
+      this.stopInformation = JSON.parse(JSON.stringify(response));
       if (this.stopInformation) {
         this.populateDataToTable(this.stopInformation);
       }
@@ -65,9 +72,9 @@ export class DisplayTableComponent implements OnInit, OnDestroy {
   }
 
   populateDataToTable(stopInformation: string){
-    this.tableDescription = this.stopInformation['stops'][0].description.slice(0);
-    this.tableStop_ID = this.stopInformation['stops'][0].stop_id.toString();
-    this.tablefieldElements = Object.assign([], this.stopInformation['departures']);
+    this.tableDescription = this.stopInformation['stops'][0].description;
+    this.tableStop_ID = this.stopInformation['stops'][0].stop_id;
+    this.tablefieldElements = [...this.stopInformation['departures']];
     if(this.tablefieldElements.length === 0)
       this.emptyRecords = true;
   }
