@@ -37,6 +37,11 @@ export class DisplayTableComponent implements OnInit {
     //   this.stop = params['stop'];
     //   this.stopID = params['stop_id'];
     // });
+    console.log(this.activateRoute.snapshot.queryParams.route);
+    console.log(this.activateRoute.snapshot.queryParams.direction);
+    console.log(this.activateRoute.snapshot.queryParams.stop);
+    console.log(this.activateRoute.snapshot.queryParamMap.get('stop_id'));
+    // this.route.snapshot.queryParamMap.get('filter');
   }
 
   private fetchNextripRouteInfo(route: string, direction: string, stop: string) {
