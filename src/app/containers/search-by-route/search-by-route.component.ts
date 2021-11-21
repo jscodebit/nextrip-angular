@@ -35,21 +35,18 @@ export class SearchByRouteComponent implements OnInit, OnDestroy {
     this.selectRoute.valueChanges
       .pipe(takeUntil(this.ngUnSubscribe))
       .subscribe(value => {
-      //console.log(typeof this.selectedRoute);
       this.selectedRoute = value;
       this.getNextripDirection(this.selectedRoute);
     })
     this.selectDirection.valueChanges
       .pipe(takeUntil(this.ngUnSubscribe))
       .subscribe(value => {
-      //console.log(value);
       this.selectedDirection = value.toString();
       this.getNextripStops(this.selectedRoute, this.selectedDirection);
     })
     this.selectStop.valueChanges
       .pipe(takeUntil(this.ngUnSubscribe))
       .subscribe(value => {
-      //console.log(value);
       this.selectedStop = value;
       this.router.navigate(['/'+this.selectedRoute +'/'+this.selectedDirection+'/'+this.selectedStop]);
     });
@@ -60,7 +57,6 @@ export class SearchByRouteComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnSubscribe))
       .subscribe(
       response => {
-        //console.log(response);
         this.nextripRoutes = response;
         if(this.selectRoute.value)
           this.getNextripDirection(this.selectRoute.value);
@@ -73,7 +69,6 @@ export class SearchByRouteComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnSubscribe))
       .subscribe(
       response => {
-        //console.log(response);
         this.directions = response;
       },
       error => { console.log(error);}
@@ -84,7 +79,6 @@ export class SearchByRouteComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnSubscribe))
       .subscribe(
       response => {
-        //console.log(response);
         this.stops = response;
       },
       error => { console.log(error);}
@@ -96,7 +90,6 @@ export class SearchByRouteComponent implements OnInit, OnDestroy {
     .subscribe(
       response => {
         console.log(response);
-        //this.listOfStops = response;
       },
       error => { console.log(error);}
     )

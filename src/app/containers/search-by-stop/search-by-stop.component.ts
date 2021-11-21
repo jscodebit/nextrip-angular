@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClientService } from 'src/app/services/http-services.service';
 
@@ -8,7 +8,7 @@ import { HttpClientService } from 'src/app/services/http-services.service';
   templateUrl: './search-by-stop.component.html',
   styleUrls: ['./search-by-stop.component.css']
 })
-export class SearchByStopComponent implements OnInit {
+export class SearchByStopComponent {
   searchByStopIDForm: FormGroup;
   stopInputField: FormControl;
 
@@ -19,11 +19,7 @@ export class SearchByStopComponent implements OnInit {
       })
     }
 
-  ngOnInit(): void {
-  }
-
   onSubmit(){
-    //debugger;
     this.router.navigate(['/' + this.searchByStopIDForm.get('stopInputField').value]);
     this.searchByStopIDForm.reset();
   }
