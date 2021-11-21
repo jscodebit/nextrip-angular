@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -10,7 +10,11 @@ import { StopInformationDataModel } from 'src/app/shared/StopInformationDataMode
   templateUrl: './display-table.component.html',
   styleUrls: ['./display-table.component.css']
 })
-export class DisplayTableComponent implements OnInit, OnDestroy {
+
+/*
+* Class Declaraiton for DisplayTableComponent class
+*/
+export class DisplayTableComponent implements OnDestroy {
   headElements = ['ROUTE', 'DESTINATION', 'DEPARTS'];
   stopInformation: any = null;
   stopID: string; route : string; direction: string; stop: string;
@@ -20,6 +24,10 @@ export class DisplayTableComponent implements OnInit, OnDestroy {
   emptyRecords: boolean = false;
   private ngUnSubscribe = new Subject();
 
+  /**
+  * Creates an instance of DisplayTableComponent,
+  * and Injecting ActivatedRoute, HttpClientService services to the component.
+  */
   constructor(private activateRoute : ActivatedRoute,
         private httpClientService: HttpClientService,){
     this.activateRoute.paramMap
@@ -38,21 +46,27 @@ export class DisplayTableComponent implements OnInit, OnDestroy {
     })
   }
 
-  ngOnInit(): void {
-  }
-
+  /**
+  * Get a result with stop information and real-time departures using 'route', 'direction' and 'stop_id' params
+  */
   private fetchNextripRouteInfo(route: string, direction: string, stop: string) {
     this.httpClientService.getStopsInformation(route, direction, stop)
     .pipe(takeUntil(this.ngUnSubscribe))
     .subscribe(this.populateDataToTable.bind(this));
   }
 
+  /**
+  * Get a result with stop information and real-time departures using 'stop_id'
+  */
   private fetchNextripInfoByStopID(stopID: string){
     this.httpClientService.getStopsInformationByStopID(stopID)
     .pipe(takeUntil(this.ngUnSubscribe))
     .subscribe(this.populateDataToTable.bind(this));
   }
 
+  /**
+  * Function to populate data on to the table
+  */
   populateDataToTable(response: StopInformationDataModel){
     if (response) {
       response = JSON.parse(JSON.stringify(response)); //To do
@@ -64,6 +78,10 @@ export class DisplayTableComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+  * OnDestroy function to close the open subscriptions to avoid  memory leak,
+  * unexpected behaviour and performance issues.
+  */
   ngOnDestroy(): void {
     this.ngUnSubscribe.next();
     this.ngUnSubscribe.complete();

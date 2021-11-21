@@ -14,6 +14,10 @@ import { Stop } from 'src/app/shared/Stop';
   templateUrl: './search-by-route.component.html',
   styleUrls: ['./search-by-route.component.css']
 })
+
+/*
+* Class Declaraiton for SearchByRouteComponent class
+*/
 export class SearchByRouteComponent implements OnInit, OnDestroy {
   nextripRoutes: NextripRoute[];
   directions: Direction[];
@@ -23,6 +27,10 @@ export class SearchByRouteComponent implements OnInit, OnDestroy {
   listOfStops;
   private ngUnSubscribe = new Subject();
 
+  /**
+  * Creates an instance of SearchByRouteComponent,
+  * and Injecting HttpClientService, Router services to the component.
+  */
   constructor(private httpClientService: HttpClientService,
     private router: Router) {
       this.selectRoute = new FormControl();
@@ -30,6 +38,9 @@ export class SearchByRouteComponent implements OnInit, OnDestroy {
       this.selectStop = new FormControl();
     }
 
+  /**
+   * Callback method that handles any additional initialization tasks.
+   */
   ngOnInit(){
     this.getNextripRoutes();
     this.selectRoute.valueChanges
@@ -52,6 +63,9 @@ export class SearchByRouteComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+  * Get a list of active Routes for the current service day
+  */
   getNextripRoutes(){
     return this.httpClientService.getRoutes()
       .pipe(takeUntil(this.ngUnSubscribe))
@@ -64,6 +78,11 @@ export class SearchByRouteComponent implements OnInit, OnDestroy {
       error => { console.log(error);}
     )
   }
+
+  /**
+  * Get two Directions for the given Route, NB/SB or EB/WB
+  * @param selectedRoute
+  */
   getNextripDirection(selectedRoute){
     return this.httpClientService.getDirection(selectedRoute)
       .pipe(takeUntil(this.ngUnSubscribe))
@@ -74,6 +93,12 @@ export class SearchByRouteComponent implements OnInit, OnDestroy {
       error => { console.log(error);}
     )
   }
+
+  /**
+  * Get the Timepoint Stops for the requested Route/Direction
+  * @param selectedRoute
+  * @param selectDirection
+  */
   getNextripStops(selectedRoute, selectDirection){
     return this.httpClientService.getStops(selectedRoute, selectDirection)
       .pipe(takeUntil(this.ngUnSubscribe))
@@ -84,6 +109,13 @@ export class SearchByRouteComponent implements OnInit, OnDestroy {
       error => { console.log(error);}
     )
   }
+
+  /**
+  * Get a result with stop information and real-time departures
+  * @param route
+  * @param direction
+  * @param stop
+  */
   getNextripStopsInformation(route, direction, stop){
     return this.httpClientService.getStopsInformation(route, direction, stop)
     .pipe(takeUntil(this.ngUnSubscribe))
@@ -94,6 +126,11 @@ export class SearchByRouteComponent implements OnInit, OnDestroy {
       error => { console.log(error);}
     )
   }
+
+  /**
+  * OnDestroy function to close the open subscriptions to avoid  memory leak,
+  * unexpected behaviour and performance issues.
+  */
   ngOnDestroy(): void {
     this.ngUnSubscribe.next();
     this.ngUnSubscribe.complete();
