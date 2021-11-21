@@ -51,7 +51,7 @@ export class DisplayTableComponent implements OnInit {
   }
 
   private fetchNextripInfoByStopID(stopID: string){
-    this.httpClientService.getStopsInformationByStopID(this.stopID)
+    this.httpClientService.getStopsInformationByStopID(stopID)
     .subscribe(response => {
       this.stopInformation = response;
       if (this.stopInformation) {
