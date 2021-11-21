@@ -10,6 +10,7 @@ export class DataTableComponent implements OnInit {
   @Input() stopID: number;
   @Input() headElements: string[];
   @Input() fieldElements: string[];
+  @Input() emptyRecordsStatus: boolean;
 
   constructor() {}
 

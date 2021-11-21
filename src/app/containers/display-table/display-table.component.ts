@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClientService } from 'src/app/services/http-services.service';
+import { StopInformationDataModel } from 'src/app/shared/StopInformationDataModel';
 
 @Component({
   selector: 'app-display-table',
@@ -11,7 +12,7 @@ export class DisplayTableComponent implements OnInit {
   headElements = ["ROUTE", "DESTINATION", "DEPARTS"];
   stopInformation: any = null;
   stopID: string; route : string; direction: string; stop: string;
-  tableDescription: string; tableStop_ID: string; tablefieldElements: [];
+  tableDescription: string; tableStop_ID: string; tablefieldElements: []; emptyRecords: boolean = false;
   //private ngUnSubscribe = new Subject();
 
   constructor(private activateRoute : ActivatedRoute,
@@ -37,11 +38,6 @@ export class DisplayTableComponent implements OnInit {
     //   this.stop = params['stop'];
     //   this.stopID = params['stop_id'];
     // });
-    console.log(this.activateRoute.snapshot.queryParams.route);
-    console.log(this.activateRoute.snapshot.queryParams.direction);
-    console.log(this.activateRoute.snapshot.queryParams.stop);
-    console.log(this.activateRoute.snapshot.queryParamMap.get('stop_id'));
-    // this.route.snapshot.queryParamMap.get('filter');
   }
 
   private fetchNextripRouteInfo(route: string, direction: string, stop: string) {
@@ -68,6 +64,8 @@ export class DisplayTableComponent implements OnInit {
     this.tableDescription = this.stopInformation['stops'][0].description;
     this.tableStop_ID = this.stopInformation['stops'][0].stop_id;
     this.tablefieldElements = this.stopInformation['departures'];
+    if(this.tablefieldElements.length === 0)
+      this.emptyRecords = true;
     //console.log(typeof this.tablefieldElements, this.tablefieldElements)
   }
 

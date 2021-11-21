@@ -17,12 +17,12 @@ export class AppComponent implements OnInit {
     // if(this.stopInformation){
     //   this.stopID = this.stopInformation.stops[0].stop_id | 1234;
     // }
-    const mapProperties = {
-      center: new google.maps.LatLng(35.2271, -80.8431),
-      zoom: 15,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    this.map = new google.maps.Map(this.mapElement.nativeElement, mapProperties);
+    // const mapProperties = {
+    //   center: new google.maps.LatLng(35.2271, -80.8431),
+    //   zoom: 15,
+    //   mapTypeId: google.maps.MapTypeId.ROADMAP
+    // };
+    // this.map = new google.maps.Map(this.mapElement.nativeElement, mapProperties);
   }
 
   notifyMe(event){
