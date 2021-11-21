@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { HttpClientService } from 'src/app/services/http-services.service';
 import { StopInformationDataModel } from 'src/app/shared/StopInformationDataModel';
 
@@ -8,12 +10,12 @@ import { StopInformationDataModel } from 'src/app/shared/StopInformationDataMode
   templateUrl: './display-table.component.html',
   styleUrls: ['./display-table.component.css']
 })
-export class DisplayTableComponent implements OnInit {
+export class DisplayTableComponent implements OnInit, OnDestroy {
   headElements = ["ROUTE", "DESTINATION", "DEPARTS"];
   stopInformation: any = null;
   stopID: string; route : string; direction: string; stop: string;
   tableDescription: string; tableStop_ID: string; tablefieldElements: []; emptyRecords: boolean = false;
-  //private ngUnSubscribe = new Subject();
+  private ngUnSubscribe = new Subject();
 
   constructor(private activateRoute : ActivatedRoute,
         private httpClientService: HttpClientService,){
@@ -42,6 +44,7 @@ export class DisplayTableComponent implements OnInit {
 
   private fetchNextripRouteInfo(route: string, direction: string, stop: string) {
     this.httpClientService.getStopsInformation(route, direction, stop)
+    .pipe(takeUntil(this.ngUnSubscribe))
     .subscribe(response => {
       this.stopInformation = response;
       if (this.stopInformation) {
@@ -52,6 +55,7 @@ export class DisplayTableComponent implements OnInit {
 
   private fetchNextripInfoByStopID(stopID: string){
     this.httpClientService.getStopsInformationByStopID(stopID)
+    .pipe(takeUntil(this.ngUnSubscribe))
     .subscribe(response => {
       this.stopInformation = response;
       if (this.stopInformation) {
@@ -61,12 +65,16 @@ export class DisplayTableComponent implements OnInit {
   }
 
   populateDataToTable(stopInformation: string){
-    this.tableDescription = this.stopInformation['stops'][0].description;
-    this.tableStop_ID = this.stopInformation['stops'][0].stop_id;
-    this.tablefieldElements = this.stopInformation['departures'];
+    this.tableDescription = this.stopInformation['stops'][0].description.slice(0);
+    this.tableStop_ID = this.stopInformation['stops'][0].stop_id.toString();
+    this.tablefieldElements = Object.assign([], this.stopInformation['departures']);
     if(this.tablefieldElements.length === 0)
       this.emptyRecords = true;
-    //console.log(typeof this.tablefieldElements, this.tablefieldElements)
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnSubscribe.next();
+    this.ngUnSubscribe.complete();
   }
 
 }

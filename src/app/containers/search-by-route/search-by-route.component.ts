@@ -40,7 +40,7 @@ export class SearchByRouteComponent implements OnInit, OnDestroy {
       this.getNextripDirection(this.selectedRoute);
     })
     this.selectDirection.valueChanges
-    .pipe(takeUntil(this.ngUnSubscribe))
+      .pipe(takeUntil(this.ngUnSubscribe))
       .subscribe(value => {
       //console.log(value);
       this.selectedDirection = value.toString();
@@ -57,7 +57,7 @@ export class SearchByRouteComponent implements OnInit, OnDestroy {
 
   getNextripRoutes(){
     return this.httpClientService.getRoutes()
-    .pipe(takeUntil(this.ngUnSubscribe))
+      .pipe(takeUntil(this.ngUnSubscribe))
       .subscribe(
       response => {
         //console.log(response);
@@ -70,7 +70,7 @@ export class SearchByRouteComponent implements OnInit, OnDestroy {
   }
   getNextripDirection(selectedRoute){
     return this.httpClientService.getDirection(selectedRoute)
-    .pipe(takeUntil(this.ngUnSubscribe))
+      .pipe(takeUntil(this.ngUnSubscribe))
       .subscribe(
       response => {
         //console.log(response);
@@ -81,7 +81,7 @@ export class SearchByRouteComponent implements OnInit, OnDestroy {
   }
   getNextripStops(selectedRoute, selectDirection){
     return this.httpClientService.getStops(selectedRoute, selectDirection)
-    .pipe(takeUntil(this.ngUnSubscribe))
+      .pipe(takeUntil(this.ngUnSubscribe))
       .subscribe(
       response => {
         //console.log(response);
