@@ -2,7 +2,7 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.0.
 
-[Demo url](https://ng-http-c5d2a.web.app/)
+[Demo](https://ng-http-c5d2a.web.app/)
 
 ## Development server
 
